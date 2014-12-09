@@ -1,0 +1,3121 @@
+id, title, authors, abstract, body
+
+# IEEE TRANSACTIONS ON COMMUNICATIONS, VOL. 61, NO. 1, JANUARY 2013
+
+# Carrier Sense Multiple Access Communications on
+
+Multipacket Reception Channels: Theory and
+
+Applications to IEEE 802.11 Wireless Networks
+
+# Douglas S. Chan, Senior Member, IEEE, Toby Berger, Life Fellow, IEEE, and Lang Tong, Fellow, IEEE
+
+# Abstract—Multipacket reception (MPR) refers to physical
+layers where receivers can decode multiple simultaneously trans-
+mitted packets. In this paper we investigate the resulting perfor-
+mance of conjoining carrier sense multiple access (CSMA) com-
+munications with MPR. We report on its maximum achievable
+stable throughput with decentralized control and show there can
+be throughput gain over slotted ALOHA (S-ALOHA), the non-
+channel-sensing protocol of choice. However, this gain diminishes
+as the physical layer’s MPR strength increases, thereby dimin-
+ishing the need for channel sensing. Nonetheless, for systems
+evolving from a single-user (SU) to a multiple-user (MU) channel,
+CSMA can furnish signiﬁcantly more efﬁcient utilization of MPR
+capacity than S-ALOHA. This is meaningful in practice because
+the emerging generation of the widely deployed IEEE 802.11
+wireless local area networks (WLAN) — 802.11ac — is adapting
+MPR and will operate in said region. In that regard, we also
+discuss the effective usage of a channel’s resources for MPR
+and highlight the advantages multiuser-MIMO (MU-MIMO),
+an MPR technique, can offer to WLANs. Using early design
+speciﬁcations of 802.11ac, we show that the existing SU-oriented
+802.11 MAC parameters can under-utilize the MPR capacity
+offered by a MU-oriented physical layer.
+
+Index Terms—Multiple access theory, CSMA, multipacket
+reception, IEEE 802.11ac, wireless local area networks, cross-
+layer design, slotted ALOHA.
+
+# I. INTRODUCTION
+
+T RADITIONALLY, practical design and theoretical anal-
+
+ysis of random multiple access protocols have assumed
+the classical collision channel model — namely, a trans-
+mitted packet
+is considered successfully received as long
+as it does not overlap or “collide” with another. Although
+this model is analytically amenable and reﬂected the state
+
+Paper approved by A. Pattavina,
+
+the Editor for Switching Architecture
+Performance of the IEEE Communications Society. Manuscript received May
+6, 2011; revised February 1 and May 23, 2012.
+
+This paper was presented in part at the 42nd Annual Allerton Conference
+on Communications, Control, and Computing, Allerton, IL, USA, 2004, and
+the 116th IEEE 802.11 Wireless Local Area Network Working Group Session,
+San Francisco, CA, USA, 2009.
+
+D. S. Chan is with Cisco Systems, San Jose, CA 95134, USA. He was
+with the School of Electrical and Computer Engineering, Cornell University,
+Ithaca, NY 14853, USA, where he researched the main body of this paper’s
+work (e-mail: douglas.chan@ieee.org).
+
+T. Berger is with the Charles L. Brown Dept. of Electrical and Computer
+Engineering, University of Virginia, Charlottesville, VA 22904, USA, and the
+School of Electrical and Computer Engineering, Cornell University, Ithaca,
+NY 14853, USA (e-mail: tb6n@virginia.edu).
+
+L. Tong is with the School of Electrical and Computer Engineering, Cornell
+
+University, Ithaca, NY 14853, USA (e-mail: ltong@ece.cornell.edu).
+
+The work of L. Tong was supported in part by the National Science
+
+Foundation under award CCF 1018115.
+
+Digital Object Identiﬁer 10.1109/TCOMM.2012.120512.110285
+
+0090-6778/13$31.00 c(cid:2) 2013 IEEE
+
+of technology when networking was an emerging ﬁeld, the
+classical collision model does not represent the capabilities of
+today’s transceivers. In particular, present transceiver technolo-
+gies enable users to correctly receive multiple simultaneously
+transmitted data packets. With proper design, this capability
+— commonly referred to as multiple packet reception (MPR)
+[1][2] — can signiﬁcantly enhance network performance.
+Many fundamental ideas behind MPR already have been
+well researched and widely applied [3, §1]. Such examples
+include code division multiple access (CDMA) and frequency
+division multiple access (FDMA). But while MPR is applied
+therein as the basis for enabling multiple users to share a
+channel, for networks that employ packet-by-packet random
+multiple access, MPR represents a paradigm shift from the
+typical single-user (SU) to multiple-user (MU) models —
+something that is only beginning to happen in practice. Em-
+ploying MPR in the physical (PHY) layer also expands the
+set of parameters for the media access control (MAC) layer to
+consider in its scheduling process, thus underscoring the im-
+portance for cross-layer design that strives to jointly optimize
+the functions of these layers [4]. Providing further insights
+for doing so in random multiple access communications with
+MPR — both in theory and in practice — is the main goal of
+the present paper.
+
+A. Development of MPR in CSMA and 802.11 WLANs
+
+The concept of random access on MPR channels was
+introduced by Ghez, Verd´u and Schwartz in [1] and [2],
+where they studied the performance of slotted ALOHA (S-
+ALOHA) with MPR. Since then there has been much research
+on multiple access with MPR. However, until only recently,
+there has been no research published on carrier sense multiple
+access (CSMA) with MPR.
+
+CSMA refers to a family of
+
+random multiple access
+schemes wherein a station (STA) with packets to transmit
+will attempt to do so only when the channel is detected to
+be idle. It was ﬁrst shown by Kleinrock and Tobagi [5] that
+this provides signiﬁcant performance improvement over S-
+ALOHA on the collision channel. CSMA have become the
+foundations of many networking technologies. For example,
+CSMA and CSMA with collision avoidance (CSMA/CA) are
+employed in the MAC layers of IEEE 802.11-based wireless
+local area networks (WLAN) [6]. However, none of these
+technologies have deployed MPR yet.
+
+CHAN et al.: CARRIER SENSE MULTIPLE ACCESS COMMUNICATIONS ON MULTIPACKET RECEPTION CHANNELS: THEORY AND APPLICATIONS . . .
+
+267
+
+Fig. 1. Typical realization of channel activities with the CSMA protocol based on our network model.
+
+The ﬁrst substantial research on CSMA with MPR did not
+appear until 2004 when we reported in [7] on conjoining the
+two concepts and studied the resulting performance. Recog-
+nizing the beneﬁts that MPR can bring to WLANs, in 2005
+we presented the idea in a proposal [8] to the 802.11 WLAN
+Working Group for a future WLAN standard that incorporates
+MPR. Two years later, the notion of adapting a MU model in
+WLAN began garnering more consideration from members of
+the Working Group (eg. [9]). In late 2008, the 802.11ac Task
+Group (TGac) was established to develop a WLAN standard
+that supports a maximum aggregate throughput of at least 1
+Gbps [10]. In order to realize the targeted data rates, TGac
+recognizes the need for higher data multiplexing efﬁciency and
+has identiﬁed MPR techniques like OFDMA and spatial divi-
+sion multiple access (SDMA), also known as MU multiple-
+input-multiple-output (MU-MIMO), as candidate technologies
+[10]. TGac now has converged on adapting MU-MIMO as one
+of the core technologies of the 802.11ac PHY layer [11].
+
+B. Main Contributions of This Paper
+
+This paper is an extension of the seminal multiaccess theory
+on MPR channels set forth in [1] and [2] to embody another
+essential MAC protocol — CSMA. We ﬁnd that CSMA will
+always provide a higher throughput than S-ALOHA when
+closed-loop control is used, but this margin diminishes when
+the ability to resolve simultaneous transmissions is strong.
+Nonetheless, for systems that are evolving from SU to MU,
+CSMA can furnish signiﬁcantly better performance than S-
+ALOHA via more efﬁcient utilization of MPR capacity. This
+is of practical signiﬁcance because the emerging generation of
+MPR-enabled WLANs likely will operate in this regime. We
+illustrate the applicability of our theoretical results by showing
+the effective usage of channel resources for MPR and the
+advantages that MU-MIMO can offer to WLANs. In particular,
+by simulating early 802.11ac speciﬁcations, we show that its
+SU-oriented MAC layer can under-utilize the capacity offered
+by an MPR-enabled MU-oriented PHY layer.
+
+C. Other Related Work
+
+In 2009, Zhang et al. reported in [12] their analysis of MPR
+in WLANs, employing 802.11g as an example. While their
+conclusions corroborate some themes in the theory we discuss
+here, their main results for CSMA are not shown analytically
+but via numerical results. And although they looked at S-
+ALOHA too,
+its intricate relationship with CSMA is not
+extensively investigated. Their entire focus is also only on
+one speciﬁc type of MPR channel. Moreover, their discussion
+
+for designing WLAN with MPR is on the limiting case when
+number of users is inﬁnite, which differs from ours on the
+ﬁnite user case as reﬂected in practice. According to [13], their
+research in [12] was conducted unbeknownst of our earlier
+work.
+
+Other researchers also have published results on this topic
+that enrich the theory and advance our understanding of it,
+like [14] and [15]. Particularly, Gau [14] provided another
+treatment of this topic by applying the traditionally used but
+possibly unrealistic framework wherein the overall offered
+trafﬁc is Poisson; we discuss in III-D how this provides an
+alternative perspective of the theory in this paper.
+
+II. THE NETWORK MODEL
+
+A. Topology, Timing Relations and the CSMA Protocol
+
+We consider a network with an unbounded number of
+stations (STAs) contending to transmit data packets to a central
+base station. Such a network model corresponds to the uplink
+of the infrastructure mode in 802.11 WLANs, wherein the
+base station is referred to as access point (AP) [6].
+
+We assume each STA can perform carrier sensing, namely
+to detect whether the channel is currently idle or busy (i.e., that
+there is at least one other STA transmitting), and we assume
+the time required to do so is negligible (i.e., zero detection
+time).1 As illustrated in Fig. 1, we employ a slotted-time
+system in which transmissions may begin only at the start
+of a slot and that every STA is synchronized to the slots.2
+Slot duration is designated to be at least the maximum signal
+propagation time of tprop = dmax/c seconds, where dmax is
+the maximum separation distance between the STAs and c is
+the signal’s speed of propagation through the network’s PHY
+medium.3 Such a setup ensures that, after a transmission stops,
+every STA will ﬁnd the channel to be clear for transmission
+after one slot’s time; thus, each transmission must be preceded
+by an idle slot. We also assume packets are of constant length
+lasting T seconds. As in [5] and [17, §4.4], without loss of
+generality, we choose T = 1, which is equivalent to expressing
+time in units of T . We also express the slot duration in terms
+of this normalized time unit as τ = tprop/T , 0 < τ < ∞.
+Consequently, a packet will last for 1/τ slots, where we have
+assumed as in [5] that 1/τ is an integer.4 In our model,
+
+1Note that in 802.11 WLANs [6] a STA has to detect that the channel has
+
+become busy within 4 μs, which is also less than half of the slot duration.
+
+2We will forgo analyzing the non-slotted versions as their performances
+
+are inferior to those of slotted versions [16] [5].
+
+3Eg., c is the speed of light for the air interface in wireless networks.
+4We can achieve this integral assumption practically by designing one’s
+
+slot duration to ﬁt this requirement.
+
+268
+
+IEEE TRANSACTIONS ON COMMUNICATIONS, VOL. 61, NO. 1, JANUARY 2013
+
+each STA immediately becomes aware of its transmission out-
+comes,5 either successful or unsuccessful, without expending
+extra cost; in this regard, acknowledgements introduce only
+ﬁxed overheads and hence can be neglected from the model
+without affecting comparative analyses.
+
+Fig. 1 illustrates a typical realization of channel activities
+with the CSMA protocol. It is not difﬁcult to see that CSMA’s
+channel activities can be modelled by a renewal process.
+Namely, the process regenerates itself after either an idle slot
+or an idle slot followed by transmission attempts that last for
+a packet’s duration. We will refer to either of these events as
+a transmission period (TP).
+
+Our analysis focuses on CSMA with immediate ﬁrst trans-
+mission (IFT) admission control. Under this policy, when a
+packet arrives at an inactive STA and the channel is sensed
+idle, then the STA will attempt to transmit the packet at the
+start of the slot immediately following the packet’s arrival.
+If the channel is sensed busy, then the STA will defer its
+attempt until there is idleness, and thereupon decides randomly
+whether to “backoff” or transmit. This random backoff is mod-
+elled as an independent sampling from a geometric distribution
+with parameter p, 0 ≤ p ≤ 1; in other words, each STA
+attempts transmission with probability p or backs off with
+probability 1− p.6 The process is repeated if the channel is
+sensed busy after a backoff or that the packet transmission is
+not successfully received.
+
+Note
+
+that CSMA with IFT is
+
+slotted
+non-persistent CSMA protocol introduced by Kleinrock and
+Tobagi in [5]. This variant of CSMA is, moreover, the primary
+MAC protocol practiced in 802.11 WLANs, called distributed
+coordinated function (DCF) [6].
+
+exactly the
+
+B. Network Trafﬁc and Throughput Characteristics
+
+Each STA in our inﬁnite population network model can have
+up to one packet to be transmitted at any time, be it a newly
+arrived packet or a so-called backlogged packet that needs to
+be retransmitted. Packet arrivals for non-backlogged STAs are
+assumed to be independent and identically distributed from
+slot to slot. Let ˆAt denote the number of new packets that
+arrived during the idle slot of TP t, t ≥ 0. Assume ˆAt has
+probability distribution P [ ˆAt = n] = ˆλn, for n ≥ 0, such that
+the mean arrival rate per slot is
+
+∞(cid:2)
+
+ˆλ =
+
+nˆλn = τ λ,
+
+(1)
+
+n=1
+
+where λ is the mean arrival rate per normalized time unit (i.e.,
+per packet duration) and is ﬁnite. Described more precisely,
+our packet arrival model is a point process over the real time
+line, with mean measure equal to the unit rate λ scaled by the
+Lebesgue measure. Note that a homogeneous Poisson point
+process of intensity λ satisﬁes condition (1).
+
+5This assumption reﬂects 802.11 WLANs wherein the STA that has
+successfully received a data packet has to transmit an acknowledgement packet
+immediately after a ﬁxed short duration; otherwise, receipt of the data packet
+is considered unsuccessful.
+
+6Note that the exponential backoff process used in 802.11 can be equiv-
+alently modelled by such a sampling from a geometric distribution with an
+appropriate p [18].
+
+When the arrival statistics are described in this manner, λ
+is equivalent to the mean arrival rate considered in many well
+known results, such as [1] and [2] for S-ALOHA with MPR
+or [5] and [17, §4.4] for CSMA on the collision channel. In
+other words, our current setup facilitates direct and meaningful
+comparison of our results with those in classical multiple
+access theory. In particular, the maximum λ for which packets
+can be successfully transmitted by a multiaccess protocol
+on a channel with asymptotically ﬁnite average delay is the
+channel’s maximum achievable stable throughput with that
+protocol [17, §4.2.3].
+
+C. The MPR Channel Model and Examples
+
+We employ the symmetric MPR channel model of [1], with
+which the successful reception probabilities depend only on
+the number of packets transmitted in the slot. For the inﬁnite
+population scenario, given that n packets are transmitted, for
+1 ≤ n ≤ ∞, 0 ≤ k ≤ n, let
+Cn,k = P [k packets are correctly received| n are transmitted].
+Clearly, the symmetric MPR channel model is a generalized
+formulation and embodies as a special case the classical
+collision channel, which has C1,0 = 0 and Cn,0 = 1 for all
+n > 1.
+
+We denote the expected number of packets correctly re-
+
+ceived from a transmission set of n STAs by
+
+Cn (cid:2)
+
+kCn,k,
+
+n(cid:2)
+
+k=1
+
+C (cid:2) sup
+
+n
+
+Cn,
+
+and assume that its limit C = limn→∞ Cn exists, which is
+usually the case in practice [1]. For instance, it is natural
+to expect C = 0 because practical PHY layers have ﬁnite
+resources and hence cannot support an unbounded number of
+simultaneous transmissions. We deﬁne channel capacity to be
+
+namely the largest expected successes with simultaneous trans-
+missions on a channel.
+In addition, we also assume that Cn is concave in n,
+a property possessed by reasonable MPR channels. To see
+why, say we have n1 < n2 < arg supn Cn. Then it
+is
+unreasonable to expect Cn1 > Cn2 < C because, if the channel
+is still capable of supporting more successful receptions even
+when greater than n2 STAs transmit, then we should have
+Cn1 ≤ Cn2. Similarly, say arg supn Cn < n3 < n4, then we
+should have Cn3 ≥ Cn4, because the channel can only yield
+fewer successes with an increasing number of transmitting
+STAs if there already are greater than arg supn Cn of them.
+It is possible for supn Cn to be achieved at more than one n,
+but with said assumption this must occur over one and only
+one consecutive set of n’s.
+
+In sections below we discuss two speciﬁc MPR channels
+we consider exemplary and refer the reader to [1] and [2]
+for additional ones. In the q-frequencies frequency-hopping
+channel, each STA chooses with equal probability one of q
+frequencies on which to transmit. If more than one STAs
+choose the same frequency, then their transmissions will fail.
+
+CHAN et al.: CARRIER SENSE MULTIPLE ACCESS COMMUNICATIONS ON MULTIPACKET RECEPTION CHANNELS: THEORY AND APPLICATIONS . . .
+
+269
+
+Such a channel has Cn = n(1 − 1/q)n−1 [1]. We will have
+an equivalent channel model if orthogonal multiuser codes
+are used instead of the q frequencies, i.e., STAs select one
+of q codes to encode their transmissions, failure occurring
+whenever two or more STAs select the same code. Another
+example we consider is the N -user channel, which assumes
+failed reception when the transmission set is strictly greater
+than N . The expected success of this channel is simply Cn = n
+for n ≤ N and Cn = 0 for n > N . Note that the Cn’s of both
+channels are concave in n.
+
+is how well
+
+A meaningful performance measure of a multiaccess pro-
+tocol
+it utilizes a channel’s MPR capacity;
+accordingly we deﬁne efﬁciency to be the protocol’s maximum
+stable throughput divided by C.
+
+III. CAPACITY OF CSMA ON MPR CHANNELS
+
+A. Ergodicity Region of CSMA
+
+There have been many results on the stability and dynamic
+control of CSMA, but they pertain to the collision channel
+[17, §4.4] [19] [20]. Although they used different deﬁnitions
+of stochastic stability and attacked the problem with unique
+approaches, they all concluded that CSMA with the collision
+channel is inherently unstable, which is expected from its
+trafﬁc load-throughput curve (cf. [17, §4.2] and [5]). We
+employ instead the analytic framework used for S-ALOHA in
+[1] and [2]:7 A system is deﬁned to be stable if the discrete-
+time Markov chain {Xt}t≥0, whose state is the number of
+backlogged packets in the system at the beginning of the tth
+TP, is ergodic and unstable otherwise [17, §3A.5].
+We give the state transition probabilities of {Xt} in Ap-
+pendix A. We can see from them that {Xt} will be irreducible
+and aperiodic as long as it satisﬁes the sufﬁcient condition
+that 0 < ˆλ0 < 1, which we assume holds as it is true for all
+reasonable scenarios.
+To obtain our ﬁrst main result, we examine the expected
+drift of the Markov chain {Xt} at state n, n ≥ 0, which is
+given by
+
+dn = E[Xt+1 − Xt|Xt = n] = E[At − Σt|Xt = n],
+
+if there is at
+
+where At and Σt are respectively the no. of new packets that
+arrived and the no. of successful transmissions during TP t.
+Observe that the expected number of arrivals during a TP
+depends on whether there are arrivals during its idle slot
+and whether any of the backlogged STAs decide to transmit
+in the slot after it. Due to IFT,
+least one
+arrival in the idle slot, then the TP will consist of this idle
+slot followed by a transmission, regardless of how many
+backlogged STAs also decide to transmit during this time too.
+And of course, this situation also occurs even if the idle slot
+has no packet arrivals but at least one of the n backlogged
+STAs transmits, which occurs with probability 1 − (1 − p)n.
+Since the expected number of arrivals during a slot and during
+a packet transmission are respectively τ λ and λ, we have
+E[At|Xt = n] = τ λ + (1 − ˆλ0)λ + ˆλ0[1 − (1 − p)n]λ
+
+= λ[1 + τ − ˆλ0(1 − p)n].
+
+7In homage to Ghez, Verd´u and Schwartz,
+
+in adapting their analytic
+framework of [1] and [2], we have kept many of their notations unchanged
+or as similar as possible.
+
+To ﬁnd Σt, observe that the STAs contributing to channel
+contention in the current TP are only those with packets that
+arrived during the idle slot and those that are retransmissions
+from STAs backlogged at the start of this TP. As in the
+derivation in [1], let Rt be the number of transmissions from
+backlogged STAs in TP t. Then
+
+P [Σt = k|Xt = n, ˆAt = i, Rt = j] = Ci+j,k,
+
+for i ≥ 0, 0 ≤ j ≤ n, 0 ≤ k ≤ i + j. With the convention that
+C0,0 = 0, we have
+
+E[Σt|Xt = n, ˆAt = i, Rt = j] = Ci+j
+
+and hence get
+
+E[Σt|Xt = n] =
+
+n(cid:2)
+
+j=0
+
+ˆλi
+
+Bn(j)Ci+j ,
+
+∞(cid:2)
+(cid:3)
+(cid:4)
+
+i=0
+
+where we have let Bn(j) =
+dn = λ(1 + τ ) − λˆλ0(1 − p)n −
+
+n
+j
+
+pj(1 − p)n−j. Therefore,
+∞(cid:2)
+Bn(j)Ci+j .
+
+n(cid:2)
+
+ˆλi
+
+(2)
+
+Then by applying a result from [1], we arrive at the following
+result on the ergodicity region of CSMA.
+
+i=0
+
+j=0
+
+Theorem 1. A CSMA system is stable for all arrival distri-
+1+τ C,
+butions such that λ < 1
+where C = limn→∞ Cn. (This also holds if C is inﬁnite: if
+limn→∞ Cn = +∞, then the system is always stable.)
+
+1+τ C and is unstable for λ > 1
+
+Proof: From (2) we can see that −2λ− n < dn < λ(1 +
+τ ), so |dn| is ﬁnite for n < ∞. Then we can use Lemma 1
+of [1], which states that
+
+∞(cid:2)
+
+n(cid:2)
+
+ˆλi
+
+lim
+n→∞
+
+i=0
+
+j=0
+
+Bn(j)Ci+j = C,
+
+D(i) = − i(cid:2)
+
+and see that the limit of equation (2) as n goes to inﬁnity is
+
+n→∞ dn = λ(1 + τ ) − C.
+
+lim
+
+Then our result on the stable region follows by Pakes’ Lemma
+(Theorem 2 of [21]).
+To obtain our result on the unstable region, we will verify
+that Kaplan’s condition [22] is satisﬁed provided that Cn <
+L, n ≥ 1, for some L ∈ (0,∞). According to [23], this is
+equivalent to showing the downward part of the drift,
+
+kPi,i−k,
+
+(3)
+
+is bounded below, as shown in Appendix B.
+
+k=1
+
+1
+
+Because the ergodicity region in Theorem 1 is achieved with
+1+τ C is the maximum
+an arbitrary transmission probability p,
+stable throughput that CSMA can achieve with open-loop
+control. Denoting ηc,o to be CSMA’s open-loop throughput,
+1+τ C.
+then Theorem 1 states that ηc,o = 1
+Another implication of Theorem 1 is that, since C = 0 for
+the collision channel, the corresponding open-loop throughput
+is then ηc,o = 0, which agrees with the known results
+that CSMA over the collision channel is inherently unstable
+without resort to a control protocol. It is also revealing to
+
+1+τ limn→∞ Cn = 1
+
+270
+
+Station A
+
+Station B
+
+Both packets
+
+overlapping here
+
+Signal
+
+propagation
+
+delay
+
+Fig. 2. Unfavorable interference can occur in S-ALOHA if signal propagation
+delay is not properly accounted for. Thus, in practice, S-ALOHA’s slot size
+has to be at least 1 + τ time units. Note that, when compared with Fig. 1, the
+only difference in the channel activities is that CSMA’s idle slots are shorter.
+
+slots
+
+compare ηc,o with the open-loop throughput for S-ALOHA
+given in [1], which we will denote by ηa,o. Although [1] shows
+that stability for uncontrolled S-ALOHA is achieved as long
+as λ < C, this does not mean S-ALOHA actually outperforms
+CSMA by a factor of 1 + τ. This is because the network
+model assumed in [1] hasn’t accounted for signal propagation
+delay. Certainly,
+if one were to implement S-ALOHA in
+practice, as illustrated in Fig. 2, propagation delay will destroy
+the synchronous assumption and detrimental interferences can
+occur between packets. Thus, as Roberts originally proposed
+[16], S-ALOHA’s slot size should have at least 1 + τ time
+units. By applying the same derivations set forth in [1], one
+can extend their results to show that S-ALOHA with a slot
+1+τ C. This means S-ALOHA
+size of 1+τ actually has ηa,o = 1
+and CSMA perform identically with open-loop control. In
+other words, Theorem 1 has the important implication that
+CSMA’s extra capability to sense the channel affords no
+additional advantage for random multiple access when no
+control protocol is used; we’ll see below how this is different
+when a control protocol is employed.
+
+B. Maximum Decentralized Stable Throughput of CSMA
+
+Similar to the decentralized control strategies analyzed in
+[2] and the references therein, we consider strategies in which
+STAs adjust their retransmission probability according to the
+feedback information they can obtain from the channel. These
+schemes can be characterized in such a form:
+
+pt = F (St)
+
+and St+1 = G(St, Zt),
+
+(4)
+
+where pt is the retransmission probability to be used in TP t,
+St is an estimate of the backlogged STAs Xt at the beginning
+of TP t, and Zt is the feedback information at the end of TP
+t.8 To proceed with the analysis, we represent this system by
+a discrete-time homogeneous Markov chain {Xt, St}t≥0, the
+state of which at time t is the pair {Xt, St}. This Markov chain
+also will be irreducible and aperiodic if the same sufﬁcient
+condition previously stated for {Xt} is satisﬁed, which we
+henceforth assume to be the case.
+
+Let ηc,c be the maximum stable throughput achievable by
+CSMA with decentralized closed-loop control. Toward ﬁnding
+ηc,c, we will ﬁrst study the case when each STA knows
+the beginning of TP t and determine the optimal
+Xt at
+control function F ∗
+(Xt) for it. To do that, we proceed by
+
+8See [2] for discussion on implementing such a closed-loop control.
+
+IEEE TRANSACTIONS ON COMMUNICATIONS, VOL. 61, NO. 1, JANUARY 2013
+
+analyzing the Markov chain {Xt} in Section III-A but with
+p = pt = F (Xt). This will then reveal the largest ergodicity
+region with decentralized control (4), and thus the highest
+possible achievable stable throughput (cf.[2]).
+Theorem 2. There exists a retransmission probability p∗
+n that
+minimizes the expected drift, dn. With that p∗
+n the CSMA
+system is stable for λ < ηc,c and unstable for λ > ηc,c, where
+(cid:5)(cid:6)
+
+(cid:2)
+
+(cid:3)
+
+∞(cid:4)
+
+∞(cid:4)
+
+1
+
+1 + τ
+
+sup
+x≥0
+
+e−x
+
+ˆλ0λ+
+
+xn
+n!
+
+n=0
+
+j=0
+
+ˆλjCn+j
+
+ηc,c = sup
+
+λ : λ <
+
+.
+
+(5)
+
+The largest stable achievable throughput by any decentralized
+control algorithm of the form (4) for CSMA is ηc,c of (5).
+
+i=0
+
+ˆλi
+
+(cid:4)
+
+(cid:3)
+
+(cid:5)n
+
+(cid:5)∞
+
+Proof: We can write the expected drift equation (2)
+as dn(p) = λ(1 + τ ) − Yn(p), where Yn(p) = λˆλ0(1 −
+pj(1 − p)n−jCi+j. Since Yn(p) is
+p)n +
+a polynomial on [0, 1], it attains a global maximum and there
+exists a p∗
+n = arg maxp∈[0,1]Yn(p) = arg minp∈[0,1] dn(p); in
+other words, there exists a retransmission probability p∗
+n that
+minimizes the drift dn at state n.
+
+j=0
+
+n
+j
+
+Following the same steps used in the proof of Theorem 1 of
+[2], we can show that Yn(x/n) converges uniformly to Y (x)
+for x ≥ 0, where
+
+(cid:7)
+
+ˆλjCn+j
+
+.
+
+(6)
+
+Y (x) = e−x
+
+(cid:6)
+ˆλ0λ +
+
+∞(cid:2)
+
+∞(cid:2)
+
+xn
+n!
+
+n=0
+
+j=0
+
+So it follows that
+n→∞ Yn(p∗
+
+lim
+
+n) = lim
+
+n→∞ sup
+x≥0
+
+Yn(x/n) = sup
+x≥0
+
+Y (x).
+
+The stable region speciﬁed by (5) follows by applying Pakes’
+Lemma [21, Theorem 2].
+
+To obtain the unstable region, we can proceed as we did
+in Theorem 1 but with pt = F (Xt) substituted for p. Since
+pt ∈ [0, 1], the result obtained there holds with said pt.
+To prove the second part of the theorem, we need to
+show that the {Xt, St} is non-ergodic with any control when
+λ > ηc,c. The proof of this is essentially the same as that
+for Theorem 2 of [2], which gives the analogous result for
+S-ALOHA. (Cf. [24] for such details.)
+
+Though ηc,c of (5) is derived by assuming the STAs have
+perfect knowledge of Xt, ηc,c can also be achieved with
+a control with partial state information. In fact, by directly
+applying the derivation in [2, §III] to our CSMA framework
+here, we can show the same control they described for S-
+ALOHA — a control that computes the backlogged estimate
+St from feedback information Zt, where Zt = 0 when TP t
+is empty (contains no transmission) and Zt = 1 otherwise —
+can also achieve ηc,c.
+Because Y (x) is expressed in terms of the arrival proba-
+bilities {ˆλn}n≥0, the expression for ηc,c given by (5) is an
+implicit equation of λ. Thus, unless the entire packet arrival
+probability distribution is speciﬁed, it is unclear whether there
+exist solutions to (5) and we cannot draw more meaningful
+general conclusions from it. It turns out, however, that a
+Poisson distribution will give a solution to (5), i.e., that the
+arrival per slot is Poisson distributed with parameter τ λ . Since
+
+CHAN et al.: CARRIER SENSE MULTIPLE ACCESS COMMUNICATIONS ON MULTIPACKET RECEPTION CHANNELS: THEORY AND APPLICATIONS . . .
+
+271
+
+Poisson arrivals are also a ﬁtting — if not the de facto —
+statistical model for packet generation in networks of large
+numbers of STAs, we assume henceforth that the packet arrival
+per slot has such a probability distribution. Then,
+Cn+j
+
+Y (x) = e−(x+τ λ)
+
+∞(cid:2)
+
+(cid:7)
+
+(cid:6)
+λ +
+(cid:6)
+λ +
+
+∞(cid:2)
+∞(cid:2)
+
+n=0
+
+n=1
+
+xn
+n!
+Cn
+
+(τ λ)j
+(cid:7)
+j!
+
+,
+
+(7)
+
+j=0
+(x + τ λ)n
+
+n!
+
+= e−(x+τ λ)
+
+and hence,
+(cid:8)
+ηc,c =
+λ : λ < 1
+
+sup
+
+1 + τ sup
+x≥0
+
+e−(x+τ λ)
+
+(cid:6)
+λ+
+
+∞(cid:2)
+
+n=1
+
+Cn
+
+(x + τ λ)n
+
+n!
+
+(cid:7)(cid:9)
+
+,
+
+(8)
+
+(cid:10)
+
+(cid:11)
+
+λ : λ < 1
+
+1+τ eλ−1
+
+which readily makes way for further analysis.
+For example, under the collision channel model, Y (x) =
+e−(x+τ λ)[x + λ(1 + τ )]. And supx≥0 Y (x) is then attained
+with x = 1 − λ(1 + τ ), so (8) reduces to the transcendental
+. Solving numerically
+equation ηc,c = sup
+for τ = 0.01, we ﬁnd that ηc,c = 0.865 packets per unit
+time (packets/T ), which is equal to the corresponding value
+calculated from Kleinrock and Tobagi’s throughput expres-
+sion for slotted non-persistent CSMA, i.e., equation (8) of
+[5]. (Recall that the non-persistent CSMA is equivalent to
+CSMA with IFT.) They also reported that as τ → 0, CSMA
+could approach perfect (collision) channel utilization, or 100%
+efﬁciency, which can be shown here as well. While usage of
+(8) is probably limited to numerical solutions, an equivalent
+closed form expression can be obtained for Poisson arrivals:
+
+Theorem 3. For Poisson distributed packet arrival, the maxi-
+mum achievable stable throughput of CSMA, ηc,c, is equiva-
+lently given by both
+
+(cid:8)
+λ : λ < 1
+
+e−x
+
+1 + τ sup
+x≥0
+
+(cid:7)(cid:9)
+
+Cn
+
+xn
+n!
+
+(9)
+
+∞(cid:2)
+
+n=1
+
+(cid:6)
+λ +
+∞(cid:2)
+
+1
+
+e−x
+
+1 + τ − e−x
+
+ηc,c = sup
+(10)
+x≥0
+1+τ limn→∞ Cn, then there exists a constant
+1+τ C = 1
+If ηc,c > 1
+A > 0 such that the control pt = A/Xt for Xt > A yields
+the optimal throughput ηc,c.
+
+n=1
+
+.
+
+Cn
+
+xn
+n!
+
+(cid:5)∞
+n=1 Cn
+
+Let y(x) = e−x(λ+
+
+Proof: Observe that by solving directly for λ from the
+inequality in (9), which is an operation that is independent of
+x, we can obtain the equivalent closed form expression for ηc,c
+of (10). So, to prove the ﬁrst part of the theorem it remains
+only to show that (9) and (8) are equivalent.
+xn
+n! ). Then y(x+τ λ) = Y (x);
+i.e., Y (x) of (7) is a translation of y(x) by −τ λ. (Recall that
+τ ∈ (0,∞) and τ λ ≥ 0.) To obtain (9), we need to show that
+supx≥0 Y (x) = supx≥0 y(x) holds within the solution space
+of the inequality λ < 1
+1+τ supx≥0 Y (x), and thus this solution
+space must then be identical to that of λ < 1
+1+τ supx≥0 y(x),
+with which (9) will follow by the deﬁnition of ηc,c in (8).
+
+Consider ﬁrst the case in which y(x) does not achieve
+its supremum. Then together with Property 5 of [2], we
+
+ηc,c = sup
+
+and
+
+can also see that supx≥0 y(x) = limx→∞ y(x) = C. Since
+Y (x) = y(x + τ λ), it follows that Y (x) will also not achieve
+its supremum, and so for all τ ∈ (0,∞) and τ λ ≥ 0,
+supx≥0 y(x + τ λ) = limx→∞ y(x + τ λ) = C. Then for
+all τ ∈ (0,∞) and τ λ ≥ 0, supx≥0 y(x) = supx≥0 Y (x).
+Therefore, by the deﬁnition of ηc,c in (8), we have ηc,c =
+1+τ supx≥0 y(x)}, as given by (9).
+sup{λ : λ < 1
+some ﬁnite x0 ≥ 0. Then for all λ ∈ [0, x0/τ ],
+Y (x) = Y (xo − τ λ) = y(x0) = sup
+x≥0
+
+(11)
+Also, for all x ≥ 0, y(x) ≤ e−xλ+x. So, for all λ ∈ [0, x0/τ ],
+
+Now consider the case in which supx≥0 y(x) = y(xo) at
+
+y(x).
+
+sup
+x≥0
+
+1
+1+τ supx≥0 Y (x) =
+≤
+≤
+1+τ
+≤ x0
+τ .
+
+1
+
+(cid:4)
+
+(cid:3)
+1
+1+τ supx≥0 y(x)
+(cid:3)
+(cid:4)
+e−x0λ + x0
+1
+e−x0 + τ
+
+1+τ
+
+x0
+τ
+
+It follows that for all λ ∈ [0,
+1
+1+τ supx≥0 Y (x)], the identity
+of (11) holds, which implies that the solution spaces of {λ :
+1+τ supx≥0 y(x)} are
+λ < 1
+identical. Therefore, by the deﬁnition of ηc,c in (8), ηc,c can
+be expressed equivalently by (9) for this case as well.
+
+1+τ supx≥0 Y (x)} and {λ : λ < 1
+
+By Theorem 3, if we have ηc,c = 1
+
+The second part of this theorem can be proved by directly
+applying the steps for the analogous result for S-ALOHA
+given in the proof of Theorem 2 in [2].
+1+τ C, which occurs when
+C = limn→∞ Cn = supn≥1 Cn, then open-loop control can
+already attain the maximum stable throughput, i.e., ηc,c = ηc,o;
+otherwise, closed-loop control with pt = A/Xt should be used
+to achieve the optimal throughput ηc,c > ηc,o (cf. [2]).
+
+C. CSMA’s Throughput in Relation with S-ALOHA’s
+
+We can straightforwardly adapt the derivation in [2] to
+obtain S-ALOHA’s optimal closed-loop throughput for a slot
+size of 1 + τ time units. Denoting said throughput by ηa,c,
+such a derivation will yield
+
+ηa,c = sup
+x≥0
+
+e−x
+
+1
+
+1 + τ
+
+Cn
+
+xn
+n!
+
+.
+
+(12)
+
+∞(cid:2)
+
+n=1
+
+1
+
+xn
+n!
+
+e−x
+
+1+τ−e−x
+
+turns out,
+
+(cid:5)∞
+n=1 Cn
+
+Comparing (10) and (12), we see the only difference be-
+tween closed-loop CSMA and S-ALOHA comes down to just
+1+τ ∈ (0, 1),
+a single −e−x term in the denominator. Since
+whenever sup0≥0
+is achieved by an
+x ∈ [0,∞), due to said −e−x term, CSMA’s maximum
+throughput will always be higher than that of S-ALOHA.
+But as it
+this advantage will diminish as the
+channel supports more MPR. Though, before we can formally
+describe this outcome, we need to deﬁne what is meant by
+supporting more MPR. Since a larger expected success for a
+transmission set corresponds to a better MPR capability for
+that set, accordingly, we can assert the following deﬁnition.
+Deﬁnition 1 (MPR Strength): Consider two channels given
+n }
+respectively by their expected transmission successes {C(1)
+and {C(2)
+n } has a
+n }, n ≥ 1. We say that the channel with {C(2)
+n } if there
+stronger MPR strength than the channel with {C(1)
+
+272
+
+IEEE TRANSACTIONS ON COMMUNICATIONS, VOL. 61, NO. 1, JANUARY 2013
+
+THROUGHPUTS AND EFFICIENCIES OF S-ALOHA AND CSMA FOR q-ORTHOGONAL-CODES CHANNEL WITH PROPAGATION DELAY τ = 0.01
+
+TABLE I
+
+No. of codes (q)
+
+C
+
+ηc,c
+
+ηa,c
+
+1
+2
+3
+4
+5
+10
+
+1.0000
+1.0000
+1.3333
+1.6875
+2.0480
+3.8742
+
+0.8655
+0.9652
+1.1752
+1.4895
+1.8346
+3.6425
+
+0.3642
+0.7285
+1.0927
+1.4569
+1.8212
+3.6424
+
+ηc,c
+
+C
+
+0.8655
+0.9652
+0.8814
+0.8826
+0.8958
+0.9402
+
+ηa,c
+
+C
+
+0.3642
+0.7285
+0.8195
+0.8634
+0.8893
+0.9402
+
+xc
+
+xa
+
+0.1345
+0.4865
+2.1706
+3.5994
+4.8034
+9.9955
+
+1.0000
+2.0000
+3.0000
+4.0000
+5.0000
+10.0000
+
+n > C(1)
+
+n ∀n /∈ N .
+
+exists a non-empty set N = {n : C(2)
+n } and that
+C(2)
+n = C(1)
+Since {Cn} directly determines the value of the summation
+in (10) and (12), Deﬁnition 1 gives a sufﬁcient condition
+for attaining greater throughput; i.e., ηc,c and ηa,c are in-
+creasing functions of MPR strength. Moreover, we can show
+a stronger MPR strength also leads to a greater x that
+achieves the supremum in (10). For brevity, let Υ(x,{Cn}) =
+n! , where {Cn} denotes a set of Cn, n ≥ 1.
+1+τ−e−x
+Lemma 1. For all expected transmission success {C(1)
+n } with
+x1 = arg supx≥0 Υ(x,{C(1)
+n }) < ∞, there exists a {C(2)
+n }
+with x2 = arg supx≥0 Υ(x,{C(2)
+n }) < ∞ such that {C(2)
+n }
+has stronger MPR strength than {C(1)
+
+(cid:5)∞
+n=1 Cn
+
+e−x
+
+xn
+
+n } and x2 > x1.
+(cid:5)∞
+n=1 Cn
+
+The proof is given in Appendix C. Note that an ana-
+logue to Lemma 1 for S-ALOHA can be stated by sub-
+stituting Υ(x,{Cn}) with Γ(x,{Cn}) = e−x
+xn
+n! .9
+Moreover, it can be shown that arg supx≥0 Υ(x,{Cn}) ≤
+arg supx≥0 Γ(x,{Cn}), with equality if and only if Cn = 0
+for all n. The relationship between CSMA and S-ALOHA is
+further revealed by employing Lemma 1:
+
+1+τ
+
+Theorem 4. For Poisson distributed packet arrival, as the
+channel’s MPR strength becomes stronger, the maximum sta-
+ble throughput achievable by CSMA, ηc,c, approaches the
+maximum stable throughput achievable by S-ALOHA, ηa,c. In
+the limit as MPR strength becomes stronger, ηc,c = ηa,c and
+the two protocols both have efﬁciency of 1.
+
+Proof: If the MPR channel’s expected transmission suc-
+cess {Cn} has limit C = supn≥1 Cn, then we know from the
+proof of our Theorem 3 and Property 5 of [2], respectively,
+that the best that CSMA and S-ALOHA can achieve are
+their open-loop throughputs, which are the same. Therefore,
+1+τ C to start with and the proof is
+ηc,c = ηa,c = ηa,o = 1
+already complete for this case.
+So let us consider now only channels with C < supn≥1 Cn,
+namely those with a {Cn} such that Υ(x,{Cn}) achieves
+its supremum at some x ∈ [0,∞). Consider a sequence
+of expected transmission successes with increasing MPR
+n }, . . .}. Let xi =
+strength {{C(i)
+arg supx≥0 Υ(x,{C(i)
+a,c to be the re-
+spective maximum stable throughput of CSMA and S-ALOHA
+n }.
+for channel {C(i)
+
+n },{C(2)
+n }). Denote η(i)
+
+n },{C(3)
+c,c and η(i)
+
+n }}i≥1= {{C(1)
+
+9This is because, apparent
+
+from Appendix C, dΓ(x0,{Cn})/dx =
+−Γ(x,{Cn})+C(x, {Cn}), so Γ(x, {Cn}) has identities similar to (16) and
+(17). Note that both dΥ(x, {Cn})/dx and dΓ(x, {Cn})/dx are linear ODEs.
+
+THROUGHPUTS AND EFFICIENCIES OF S-ALOHA AND CSMA FOR THE
+
+N -USER CHANNEL WITH PROPAGATION DELAY τ = 0.01
+
+TABLE II
+
+C = N
+
+ηc,c
+
+ηa,c
+
+1
+2
+3
+4
+5
+10
+
+0.8655
+1.1541
+1.5570
+2.0455
+2.5916
+5.7775
+
+0.3642
+0.8316
+1.3575
+1.9231
+2.5184
+5.7737
+
+ηc,c
+
+C
+
+0.8655
+0.5770
+0.5190
+0.5114
+0.5183
+0.5778
+
+ηa,c
+
+C
+
+0.3642
+0.4158
+0.4525
+0.4808
+0.5037
+0.5774
+
+xc
+
+xa
+
+0.1345
+0.8097
+1.7735
+2.6496
+3.4654
+7.2872
+
+1.0000
+1.6180
+2.2695
+2.9452
+3.6395
+7.2970
+
+1
+
+(cid:5)∞
+n=1 C(i)
+
+c,c ≤
+From (10) and (12) we can see an upper bound: η(i)
+1+τ−e−xi supx≥0 e−x
+η(i)
+a,c. Be-
+cause e−x > 0 for all x ∈ [0,∞), we also have a lower bound
+a,c, with equality if and only if i = 1 and C(1)
+of η(i)
+n = 0
+for all n. Stated equivalently, if we let γi = 1+τ
+1+τ−e−xi , then
+
+c,c ≥ η(i)
+
+1+τ−e−xi
+
+xn
+n! =
+
+1+τ
+
+n
+
+η(i)
+a,c < η(i)
+
+c,c ≤ γiη(i)
+
+a,c
+
+for all i > 1.
+
+(13)
+
+n
+
+n
+
+<
+
+1+τ
+
+1+τ
+
+n = max{C(j)
+
+n }}i≥1 with C(j)
+
+} is constructed from {C(i)
+
+By our deﬁnition of stronger MPR strength, given any
+n } in our sequence {{C(i)
+n }}i≥1, there must exist a {C(j)
+n },
+{C(i)
+n } = n for all
+j ≥ i, in {{C(i)
+n ≤ (cid:8)xi + 1(cid:9), where (cid:8)xi + 1(cid:9) denotes the largest integer less
+than or equal to xi + 1. Thereafter in the sequence, {C(j+1)
+}
+must satisfy the construction method given in the proof of
+Lemma 1, as if {C(j+1)
+n } with that
+method. So, by Lemma 1 we can construct from {xi}i≥1 a
+subsequence {ˆxk}k≥1, with ˆxk+1 > ˆxk, and by our deﬁnition
+of higher MPR strength there does not exist a subsequence in
+{xi}i≥1 that is constant or strictly decreasing. Then because
+1+τ−e−ˆxk for all k, we have limi→∞ γi = 1+,
+1+τ−e−ˆxk+1
+i.e., that {γi}i≥1 is approaching 1 from above. Therefore,
+along with (13), as the MPR strength becomes stronger with
+each i, η(i)
+Finally, in the limit as MPR strength increases, we have the
+ideal MPR channel that has Cn = n for all n and channel
+capacity C = ∞. Accordingly we then have C = ∞, with
+which ηc,c = ηa,c = ηa,o = ∞ and efﬁciency is ηc,c/C = 1.
+Theorem 4 essentially shows that as the MPR strength
+becomes stronger, we can perform equally well without carrier
+sensing by simply accessing the channel with random schedul-
+ing — i.e., closed-loop S-ALOHA. And then when the MPR
+strength is sufﬁciently strong, in lieu of scheduling, STAs
+could even transmit at any slot and achieve the same through-
+put performance by relying solely on the PHY layer as the
+means for separating the STAs’ transmissions. This conclusion
+regarding when MAC-layer scheduling becomes unnecessary
+by virtue of the PHY layer’s MPR strength has been pointed
+
+c,c is approaching η(i)
+
+a,c from above.
+
+CHAN et al.: CARRIER SENSE MULTIPLE ACCESS COMMUNICATIONS ON MULTIPACKET RECEPTION CHANNELS: THEORY AND APPLICATIONS . . .
+
+273
+
+CSMA
+S−ALOHA
+Channel capacity
+τ = 0
+τ = 0.1
+τ = 0.5
+τ = 1.0
+τ = 10
+
+4
+
+3.5
+
+3
+
+2.5
+
+2
+
+1.5
+
+1
+
+0.5
+
+)
+e
+m
+
+i
+t
+ 
+t
+i
+n
+u
+
+ 
+r
+e
+p
+
+ 
+s
+t
+e
+k
+c
+a
+p
+(
+ 
+t
+u
+p
+h
+g
+u
+o
+r
+h
+t
+ 
+e
+l
+b
+a
+t
+s
+ 
+
+m
+u
+m
+i
+x
+a
+M
+
+0
+
+ 
+1
+
+2
+
+3
+
+4
+
+7
+No. of orthogonal multiuser codes (q)
+
+5
+
+6
+
+ 
+
+10
+
+ 
+
+)
+e
+m
+
+i
+t
+ 
+t
+i
+n
+u
+
+ 
+r
+e
+p
+
+ 
+s
+t
+e
+k
+c
+a
+p
+(
+ 
+t
+u
+p
+h
+g
+u
+o
+r
+h
+t
+ 
+e
+l
+b
+a
+t
+s
+ 
+
+m
+u
+m
+i
+x
+a
+M
+
+9
+
+8
+
+7
+
+6
+
+5
+
+4
+
+3
+
+2
+
+1
+
+0
+
+ 
+1
+
+8
+
+9
+
+10
+
+CSMA
+S−ALOHA
+Channel capacity
+τ = 0
+τ = 0.1
+τ = 0.5
+τ = 1.0
+τ = 10
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+9
+
+10
+
+No. of supported users (N)
+
+Fig. 3. Maximum stable throughput of CSMA and S-ALOHA for the q-
+orthogonal codes MPR channel with various propagation delays (τ ). The
+channel’s MPR capacity is displayed for comparison. As in Figs. 4–6, note
+also the overall throughput-lowering effect of τ .
+
+Fig. 5. Maximum stable throughput of CSMA and S-ALOHA for the N-
+user MPR channel with various propagation delays (τ ). The channel’s MPR
+capacity is also displayed for comparison.
+
+1
+
+0.9
+
+0.8
+
+0.7
+
+0.6
+
+0.5
+
+0.4
+
+0.3
+
+0.2
+
+0.1
+
+y
+c
+n
+e
+i
+c
+i
+f
+f
+E
+
+0
+
+ 
+1
+
+2
+
+3
+
+4
+
+7
+No. of orthogonal multiuser codes (q)
+
+5
+
+6
+
+ 
+
+CSMA
+S−ALOHA
+Channel capacity/q
+τ = 0
+τ = 0.1
+τ = 0.5
+τ = 1.0
+τ = 10
+
+8
+
+9
+
+10
+
+y
+c
+n
+e
+i
+c
+i
+f
+f
+E
+
+1
+
+0.9
+
+0.8
+
+0.7
+
+0.6
+
+0.5
+
+0.4
+
+0.3
+
+0.2
+
+0.1
+
+0
+
+ 
+1
+
+ 
+
+CSMA
+S−ALOHA
+Channel capacity/N
+τ = 0
+τ = 0.1
+τ = 0.5
+τ = 1.0
+τ = 10
+
+10
+
+20
+
+30
+
+40
+
+50
+
+60
+
+70
+
+80
+
+90
+
+100
+
+No. of supported users (N)
+
+Fig. 4. Efﬁciency of CSMA and S-ALOHA for the q-orthogonal codes MPR
+channel with various propagation delays (τ ). The channel’s MPR capacity
+normalized by q is also displayed for comparison.
+
+Fig. 6. Efﬁciency of CSMA and S-ALOHA for the N-user MPR channel
+with various propagation delays (τ ). The channel’s MPR capacity normalized
+by N is also displayed for comparison. Note that the horizontal scale here
+is different from that of Fig. 5 in order to show the relative growth of the
+efﬁciency curves.
+
+out [25]. An additional insight herein and implicit in [2] is
+the juncture that occurs, i.e., when closed-loop control is ﬁrst
+rendered unnecessary and open-loop control alone sufﬁces, is
+when the MPR channel has C = lim supn≥1 Cn = C (cf. [24]).
+To illustrate the results in our discussion thus far, we
+plot ηc,c, ηa,c and their efﬁciencies in Figs. 3–6 for the
+q-orthogonal-codes and N -user MPR channels. These val-
+ues and the x’s that attain them are also given in Ta-
+bles I–II, where xc = arg supx≥0 Υ(x,{Cn}) and xa =
+arg supx≥0 Γ(x,{Cn}).
+Observe that the N -user channel has N = {N} at each
+increment in channel capacity; so, its MPR strength is be-
+coming stronger. The same is true for the q-orthogonal-codes
+channel, which has N = {n : n ≥ 1} at each q because
+C(q+1)
+n , ∀n ≥ 1. But
+n
+while their associated throughputs are increasing with channel
+
+q+1 )n−1 > n(1− 1
+
+q )n−1 = C(q)
+
+= n(1− 1
+
+1
+
+capacity, they also settle into linear growths in Figs. 3 and 5.
+Actually, this is expected for the q-orthogonal-codes channel,
+1+τ qe−1 [2] and so its growth has a constant
+since ηa,c = 1
+1+τ e−1. And, an approximately linear growth for
+slope of
+the N -user channel has been predicted by [26], wherein
+N ln N and N − √
+throughputs of random access protocols for said channel are
+√
+N when N is
+N are o(N ) when N is large,
+large. Because
+this channel’s ηa,c will eventually be growing approximately
+linearly at a small positive slope.
+
+bounded between N − √
+
+√
+N ln N and
+
+These throughputs’ linear asymptotic growth trends are
+as well reﬂected in Figs. 4 and 6, where the associated
+efﬁciencies become nearly constant with MPR strength. This
+too is expected for the q-orthogonal-codes channel, since
+q ) → e−1/q at large q, it can be easily shown that
+(1 − 1
+
+274
+
+IEEE TRANSACTIONS ON COMMUNICATIONS, VOL. 61, NO. 1, JANUARY 2013
+
+C → qe−1 at large q (as conﬁrmed by the normalized capacity
+in Fig. 4); thus, its efﬁciency evolves into ∼ 1
+1+τ at large q. As
+ηa,c/N is bounded between 1 −(cid:12)
+for the N -user MPR channel, said trend is due to the fact that
+1/N
+
+(ln N )/N and 1 −(cid:12)
+
+at large N , where both increase at a slow rate.
+
+Interestingly, while S-ALOHA’s efﬁciency always rises
+from below, CSMA’s efﬁciency may initially reach a local
+maximum — even as high as 1 when τ is small for some
+channels — before tapering off to approach S-ALOHA’s.
+This perhaps unintuitive effect can be shown from (15). For
+instance, as long as supn≥1 Cn ≤ C1, efﬁciency can be
+maintained at or increase toward 1 (cf. Fig. 4). And even after
+said local maximum, CSMA’s efﬁciency (and throughput) can
+still be considerably higher than S-ALOHA’s. This indicates
+CSMA can be much more efﬁcient than S-ALOHA at utilizing
+the MPR capability in the region where the SU channel is just
+beginning to evolve into a MU one. We discuss in Section
+IV how this region is an important one to consider because
+resources for enabling more MPR can be scarce in practice.
+
+D. Connection to Results from Classical Multiaccess Theory
+
+1
+
+(cid:5)∞
+alternative
+n=1 Cn
+
+xn
+n!
+
+is
+i.e.,
+
+the
+
+is
+
+interpretation
+
+equivalent
+supremum of
+
+that
+An
+τ supx≥0 e−x
+to
+τ supX∼P oiss(x),x≥0 E[CX ],
+1
+the
+expectation of CX over all X, where X is a Poisson
+distributed random variable with mean x [2]. Because
+each TP for S-ALOHA is 1 + τ, be it idle or not, (12)
+can be explained by said interpretation via renewal theory
+arguments.10 This applies to CSMA too: Due to the beneﬁts of
+channel sensing, its difference from S-ALOHA is that an idle
+slot lasts only τ time units, so the TP for CSMA has expected
+value of (1 + τ )P [X > 0] + τ P [X = 0] = 1 + τ − e−x,
+which is reﬂected in (10).
+
+Another perspective on CSMA’s diminishing throughput
+gain also follows. As the MPR strength becomes stronger,
+STAs can then transmit at any slot and have a lower chance of
+collision; thus, there are fewer idle slots. This is conﬁrmed by
+xc and xa both increasing with MPR strength, i.e., P [X = 0]
+is decreasing. When channel activities are viewed solely as a
+renewal process, the only difference between CSMA and S-
+ALOHA is that the former has shorter idle slots, and so, if idle
+slots are becoming fewer, then the TPs for both protocols must
+be approaching the same duration; ergo, the same throughput.
+Finally, note that X, the number of transmission attempts
+in each slot, is actually the overall offered network trafﬁc, i.e.,
+the aggregate of both new and backlogged trafﬁc. That’s why
+our ηc,c value for the collision channel is the same as that from
+Kleinrock and Tobagi [5] despite the fact that their derivation,
+like many multiaccess research of that era, hinges on the
+ﬂawed assumption [2] [17, §4.2.2] that the network’s offered
+trafﬁc is approximately Poisson distributed. Note that this is
+also true for the CSMA with MPR throughputs calculated
+from Gau’s equation (5) of [14], which actually has the same
+Poisson trafﬁc assumption.
+
+10By renewal theory arguments, throughput (as measured in units of packets
+per unit time) is the expected duration of successful attempts divided by
+the expected duration of the transmission period (i.e., renewal cycle), and
+multiplied by the expected number of packets in each successful attempt.
+
+IV. APPLYING MPR IN PRACTICE AND PERFORMANCE OF
+
+802.11 WLANS WITH MU-MIMO
+
+A. Insights for Practical Designs of MPR-enabled Networks
+Perhaps not emphasized enough in MPR multiaccess re-
+search is the unstated assumption that even as more simulta-
+neously transmitted packets can be successfully received, the
+packet’s data rate has to be maintained at some minimum level
+in order to achieve actual increase in network throughput. In
+other words, we cannot examine solely the improvement on
+multiaccess throughput expressed in packets per unit time; we
+need to also consider whether and how much the packet’s data
+rate has been sacriﬁced by the diverting of channel resources to
+support MU capability. Simply put, if we denote r1 and η1 to
+be the respective data rate (in bits per packet) and multiaccess
+throughput (in packets per unit time) for a PHY layer, and
+r2 and η2 for those of another PHY layer with stronger MPR
+strength, then, even though η2 > η1, we still need
+
+η2/η1 > r1/r2
+
+(14)
+
+in order for the latter PHY layer to deliver a higher network
+throughput of η2r2, in bits per unit time.
+
+The basis for MU capability is to exploit resources in the
+channel that provide orthogonal properties to support MPR.
+Ultimately, this is equivalent to ﬁnding what is known as
+degrees of freedom (DoF) from the channel to multiplex data
+streams [3, §1]. The design criteria that we describe here is:
+A resource that gives rise to new DoF should be used to
+increase MU capability when (14) can be satisﬁed; otherwise,
+the network throughput can be made higher by applying the
+resource to instead increase the data rate of each packet.
+
+B. WLAN Design Constraints and Advantages of MU-MIMO
+MIMO signaling with multiple antennas exploits the spatial
+diversity “resource” in multipaths of a wireless channel to
+generate DoF that can be used for boosting a point-to-point
+link’s spectral efﬁciency or robustness. Because of indepen-
+dent fading statistics among users’ propagation paths, MU
+diversity also exists as a resource for creating DoF to multiplex
+MU data streams [27]. The challenge in designing MIMO
+systems centers on balancing the trade-offs among said various
+gains with the available DoF.
+
+While MIMO spatial multiplexing of additional data
+streams increases data rates linearly, the SNR required to
+robustly receive them also grows noticeably. In fact, a cur-
+rently impractical level of SNR is required to receive just a
+few spatial streams signaled at high orders of modulation and
+coding rates [28, §5.3]. Contrastingly, indoor measurements
+show MU-MIMO can achieve considerably higher spectral
+efﬁciencies than SU-MIMO for the same SNR and number of
+receive antennas per user [29]–[30]. This implies that, as SNR
+and number of receive antennas are typical WLAN design
+constraints,
+the extra DoF obtained from adding transmit
+antennas should be applied on MU multiplexing rather than on
+raising the level of a SU’s spatial multiplexing toward levels
+that the system cannot sustain robustly. And since a PHY layer
+that uses these new DoF to improve its SU data rate cannot
+practically do so below a certain SNR, when this PHY layer is
+compared to another that instead diverts these DoF to increase
+
+CHAN et al.: CARRIER SENSE MULTIPLE ACCESS COMMUNICATIONS ON MULTIPACKET RECEPTION CHANNELS: THEORY AND APPLICATIONS . . .
+
+275
+
+)
+s
+p
+b
+G
+
+(
+ 
+t
+u
+p
+h
+g
+u
+o
+r
+h
+t
+ 
+k
+r
+o
+w
+t
+e
+n
+ 
+e
+t
+a
+g
+e
+r
+g
+g
+A
+
+4
+
+3.5
+
+3
+
+2.5
+
+2
+
+1.5
+
+1
+
+0.5
+
+0
+
+ 
+1
+
+11n A−MPDU limit
+8 x 11n A−MPDU limit
+1 s.s. per user
+2 s.s. per user
+3 s.s. per user
+4 s.s. per user
+
+ 
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+No. of MU−MIMO users (M)
+
+y
+c
+n
+e
+i
+c
+i
+f
+f
+E
+
+1
+
+0.9
+
+0.8
+
+0.7
+
+0.6
+
+0.5
+
+0.4
+
+0.3
+
+0.2
+
+ 
+1
+
+ 
+
+11n A−MPDU limit
+8 x 11n A−MPDU limit
+1 s.s. per user
+2 s.s. per user
+3 s.s. per user
+4 s.s. per user
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+No. of MU−MIMO users (M)
+
+Fig. 7. Aggregate network throughput of the proposed 802.11ac WLAN
+for 1–4 spatial streams (s.s.) per user. As in Fig. 8, the A-MPDU size limits
+considered are 65 KB and 520 KB, which are, respectively, the maximum
+deﬁned in 802.11n and eight times of that; note that larger sizes do not show
+changes to the trends. 802.11ac proposes to support up to four MU-MIMO
+users, where each user can have up to 4 s.s. for a system maximum of 8 s.s.
+802.11ac has a maximum aggregate throughput of at least 1 Gbps.
+
+A SELECTION OF DATA RATES FOR AN 80-MHZ 802.11AC OFDM
+
+TABLE III
+
+SYMBOL WITH SHORT GUARD INTERVAL (400 NS) [11]
+
+No. of
+
+Modulation
+
+spatial streams
+
+1
+1
+2
+3
+4
+
+BPSK
+
+64-QAM
+64-QAM
+64-QAM
+64-QAM
+
+Code
+rate
+
+1/2
+5/6
+5/6
+5/6
+5/6
+
+Spectral efﬁciency
+
+(Mb/s/Hz)
+
+0.40625
+4.0625
+8.125
+12.1875
+16.25
+
+Data rate
+(Mbps)
+
+32.5
+325.0
+650.0
+975.0
+1300.0
+
+the system’s MU capacity, we can also expect (14) to likely
+be satisﬁed. Thus, MU diversity can be an effective resource
+for realizing throughput gains from MPR in current WLANs.
+Lastly, we note that ﬁnding new channel resources to
+enhance MPR can become progressively difﬁcult because of
+practical issues. For instance, the number of antennas is a
+potential constraint due to space limitations and costs. Also,
+the maximum transmit power allowable by regulatory rules is a
+constraint on the power density per spatial stream, limiting the
+achievable level of MU multiplexing. Consequently, although
+the throughput gain with the next generation of WLANs
+promises to be rewarding, the increment in MPR capacity will
+only be moderate, not dramatic.
+
+C. Performance Results and Enhancements for MU-based
+802.11ac WLANs
+
+To see the beneﬁts from applying MPR to CSMA wireless
+networks in practice, we have simulated the performance of
+WLANs based on the initial draft text (version D0.1) [11] pro-
+posed for the 802.11ac standard.11 While this standardization
+
+11The particular parameters we took from D0.1 have not been changed in
+D4.0, the latest and nearly ﬁnal draft version at this paper’s press time (Nov.
+2012).
+
+Fig. 8.
+Efﬁciency of the proposed 802.11ac WLAN in the infrastructure
+mode. The decrease in efﬁciency with M indicates the current 802.11 SU-
+oriented MAC cannot fully utilize the PHY layer’s MU capacity.
+
+effort is still ongoing and industry dynamics are difﬁcult to
+predict, our results provide the best means for speculating at
+present about how the ﬁnalized speciﬁcation may perform.
+
+The plan for 802.11ac to perform MU-MIMO is to extend
+the SU-MIMO framework of 802.11n. As a result, the funda-
+mental components in the 802.11n PHY layer are adopted.
+Table III lists the 80-MHz data rates from [11] that we
+simulated. Details of our simulation framework are explained
+in Table IV. Of note is that 802.11ac has adapted the same
+MAC backoff policy as 802.11n. And since this policy’s
+parameters are originally designed for a SU PHY layer, the
+simulation results represent those of a SU-oriented MAC layer.
+In Figs. 7-8 we plot the network throughput and efﬁciency
+for the described framework. Fig. 7 shows that MU-MIMO
+can offer signiﬁcant increase in network throughput. However,
+these throughputs exhibit a ceiling, and hence the corre-
+sponding efﬁciencies in Fig. 8 also show a gradual decrease
+with M . To remedy this effect, we extend the maximum A-
+MPDU size to 8 times that of the 802.11n limits. This would
+mitigate the degradation on the ratio of preamble overhead to
+payload duration as the packet’s data rate increases. But while
+this method improves performances, which are also plotted
+in Figs. 7-8,
+the downward trend in efﬁciencies persists.
+Evidently such performances are those of a MAC layer that
+is not optimized for its underlying PHY layers; otherwise,
+as discussed in Section III, the throughputs will unboundedly
+scale with MU capacity. Note that we have found the general
+trends displayed of the plots in Figs. 7-8 remain unchanged
+when the number of clients in the network is varied.
+
+These results clearly indicate that the current SU-oriented
+MAC layer in 802.11 cannot fully utilize the PHY layer’s MU
+capacity. As expected from what we pointed out in Section III,
+when the MU capacity increases, the number of idle slots has
+to correspondingly decrease to achieve the optimal throughput.
+Thus, the fundamentals for 802.11ac can be enhanced with
+an appropriate cross-layer design approach, in particular, by
+applying the theory of CSMA with MPR that we discussed.
+
+276
+
+IEEE TRANSACTIONS ON COMMUNICATIONS, VOL. 61, NO. 1, JANUARY 2013
+
+DETAILS OF OUR 802.11AC WLAN SIMULATION FRAMEWORK
+
+TABLE IV
+
+Simulation parameter
+
+Value
+
+Remarks
+
+Operating mode
+
+No. of AP
+
+No. of clients
+
+Infrastructure
+
+mode
+
+1
+29
+
+No. of simultaneous
+
+transmissions
+
+Downlink: M
+Uplink: 1 to M
+
+Channel width and PHY data
+
+See Table III
+
+rates
+
+PHY header duration
+
+No. of LTFs in preamble
+
+16 μs
+
+Depends on
+no. of spatial
+streams, per
+
+[11]
+
+Downlink and uplink transmissions cannot concurrently coexist; i.e., when STA(s) transmit together
+with the AP, none of their frames are correctly received.
+AP transmissions to the clients are called downlink [6].
+Client transmissions to the AP are called uplink [6].
+M is the maximum no. of simultaneous transmissions allowable by the MU-MIMO PHY layer. Note
+that, unlike in our simulations, TGac has ultimately decided to deﬁne only downlink MU-MIMO in
+the current 802.11ac standard, despite early proposals to also adapt uplink MU-MIMO and leaving
+this for potential consideration in future amendments.
+Only those signaled by 64-QAM at rate 5/6 are used here. Each client’s link has the same data rate.
+SNR is assumed sufﬁcient enough for a negligible PER.
+This is based on the header structure proposed in [11], i.e., the SIG ﬁelds.
+This is necessary for receivers to estimate the MIMO channel properly (cf. 802.11n [6]). These Long
+Training Fields (LTFs) are those proposed in [11].
+
+MAC backoff policy
+
+As in 802.11n
+
+RTS-CTS frame exchange
+
+TXOP duration
+
+Frame aggregation
+
+Enforced for
+all TXOPs
+3.008 ms
+
+Enforced for
+all data frames
+
+MPDUs per A-MPDU
+
+64
+
+A-MPDU size
+
+Acknowledgement (ACK)
+
+policy
+
+65 535 bytes
+Implicit and
+Compressed
+BlockACK
+
+CSI feedback or channel
+
+Not included
+
+sounding
+
+802.11ac has adapted essentially the same backoff policy as in 802.11n. Note that these parameters
+were designed for a SU-oriented PHY.
+Transmitted with 1 spatial stream by BPSK at rate 1/2 (cf. Table III), as in practice to maximize
+effect against hidden nodes.
+This is the maximum speciﬁed for OFDM-based PHY layers by 802.11 [6].
+Each TXOP is packed with as many A-MPDUs as possible. In 802.11 parlance, an aggregated data
+frame is known as aggregated MPDU (A-MPDU).
+This is the maximum speciﬁed by 802.11 [6].
+This is the maximum speciﬁed by 802.11 [6]; 802.11ac is proposing a maximum 16 times of that.
+We assume the M clients ACK simultaneously via uplink MU-MIMO. Although currently in
+802.11ac each client’s ACK is sent individually to the AP, our results will still show the general
+expected performance trend. Implicit and Compressed BlockACK minimizes ACK overheads.
+
+Obtaining channel state information (CSI), which is essential for MU-MIMO, can incur small
+overheads. Since our goal is on showing the general expected performance, we have assumed accurate
+CSI is known at the transmitter.
+
+Network trafﬁc model
+
+STAs always
+saturated with
+packets to send
+
+This forces the system to operate in a critical region where it is on the verge of drifting into instability,
+i.e, throughput approaching zero and delay approaching inﬁnity, allowing us to examine a protocol’s
+fundamental performance.
+
+No. of iterations in simulation
+
+100 000
+
+Running more, e.g. 1 000 000, did not exhibit any signiﬁcant differences in the scale of our plots.
+
+APPENDIX A: STATE TRANSITION PROBABILITIES OF
+
+MARKOV CHAIN {Xt}
+
+Let Pi,k be the conditional probability that, if j packets are
+backlogged at the start of the current TP, then k packets will
+be backlogged at the start of the next TP. With Λk denoting
+the probability there are exactly k new arrivals during the 1/τ
+slots when there are transmissions (e.g., Λ0 = ˆλ1/τ
+), we have:
+
+0
+
+ˆλnCn,nΛ0
+n(cid:2)
+Cn,sΛk−(n−s), for k ≥ 1;
+j(cid:2)
+i(cid:2)
+s=max(0,n−k)
+
+Cn+j,n+sΛs−k, for i ≥ 1
+
+∞(cid:2)
+
+n=1
+
+• P0,0 = ˆλ0 +
+∞(cid:2)
+ˆλn
+∞(cid:2)
+
+• P0,k =
+
+n=1
+
+• Pi,i−k =
+
+ˆλn
+and 1 ≤ k < i;
+
+n=0
+
+• Pi,i = ˆλ0Bi(0) +
+i(cid:2)
+
+i ≥ 1; and
+∞(cid:2)
+• Pi,i+k =
+
+ˆλn
+
+for i ≥ 1 and k ≥ 1.
+
+j=k
+
+n=0
+
+j=k
+
+Bi(j)
+∞(cid:2)
+i(cid:2)
+
+s=k
+
+ˆλn
+
+n=0
+
+j=0
+
+j(cid:2)
+
+s=0
+
+Bi(j)
+n+j(cid:2)
+
+Bi(j)
+
+s=max(0,n−k)
+
+APPENDIX B: PROOF OF (3) IS BOUNDED BELOW
+
+k=1
+
+k=1
+
+D(i) = − i(cid:2)
+= − i(cid:2)
+= − i(cid:2)
+> − i(cid:2)
+> − i(cid:2)
+> −L,
+
+j=1
+
+j=1
+
+j=1
+
+kPi,i−k
+∞(cid:2)
+
+k
+
+n=0
+
+Bi(j)
+
+Bi(j)
+
+Bi(j)
+
+j=k
+
+i(cid:2)
+ˆλn
+∞(cid:2)
+∞(cid:2)
+∞(cid:2)
+
+n=0
+
+n=0
+
+ˆλn
+
+ˆλn
+
+n=0
+
+s=k
+
+j(cid:2)
+Bi(j)
+j(cid:2)
+s(cid:2)
+j(cid:2)
+
+k=1
+
+s=1
+
+s=1
+
+ˆλnCn+j
+
+Cn+j,n+sΛs−k
+
+kCn+j,n+sΛs−k
+
+s(cid:2)
+
+k=1
+
+Λs−k
+
+sCn+j,n+s
+
+Cn+j,n+sΛs, for
+
+Cn+j,sΛk−(n−s),
+
+where Pi,i−k and deﬁnition of Λk are given in Appendix A.
+
+CHAN et al.: CARRIER SENSE MULTIPLE ACCESS COMMUNICATIONS ON MULTIPACKET RECEPTION CHANNELS: THEORY AND APPLICATIONS . . .
+
+277
+
+APPENDIX C: PROOF OF LEMMA 1
+
+ACKNOWLEDGMENT
+
+Proof: We ﬁrst establish some properties to be used in
+the proof. Consider an x0 = arg supx≥0 Υ(x,{Cn}) for some
+general {Cn} where x0 < ∞. The concavity assumption we
+have on expected transmission successes {Cn} implies that
+Υ(x,{Cn}) is concave down, and thus x0 is where the global
+maximum occurs. Naturally, dΥ(x,{Cn})
+= 0, which after
+some simpliﬁcation of terms can be written as
+dΥ(x0,{Cn})
+
+x=x0
+
+(cid:13)(cid:13)
+
+xn
+
+dx
+
+(cid:5)∞
+n=1 Cn
+
+(cid:5)∞
+n=1 Cn
+
+= − e−x
+
+1+τ−e−x
+
+n! + e−x
+
+1+τ
+
+(15)
+Interestingly, the ﬁrst term of dΥ(x,{Cn})
+in (15) is exactly the
+expression for −Υ(x,{Cn}). Thus, if we denote C(x,{Cn})
+to be the second term of dΥ(x,{Cn})
+
+in (15), we will have
+
+dx
+
+dx
+
+Υ(x,{Cn}) = Υ(x0,{Cn}) = C(x0,{Cn}).
+
+(16)
+
+dx
+
+sup
+x≥0
+
+xn−1
+(n−1)! = 0.
+
+Since x0 is the global maximum, dΥ(x,{Cn})
+so it follows from (15) that
+
+dx
+
+> 0 for x < x0,
+
+n
+
+n
+
+dx
+
+Υ(x,{Cn}) < C(x,{Cn})
+
+for x < x0.
+
+n = C(1)
+
+(17)
+< 0 for x > x0, Υ(x,{Cn}) >
+Similarly, because dΥ(x,{Cn})
+C(x,{Cn}) for x > x0.
+n }
+We now construct an expected transmission success {C(2)
+n } with C(2)
+that will complete the proof. Consider a {C(2)
+n >
+C(1)
+n for all n /∈ N , where N ∈
+n for all n ∈ N and C(2)
+{n : n > x1 + 1} and N (cid:12)= ∅. In other words, {C(2)
+n } contains
+one or more C(2)
+at some (integer)
+indices n > x1 + 1, while the rest of {C(2)
+n } is the same
+as {C(1)
+n <
+n }. Then we know from the proof of Theorem 3
+supn≥1{C(2)
+that Υ(x,{C(2)
+n }) will achieve its supremum at some ﬁnite x2.
+From the construction of {C(2)
+n } we can readily see that it has
+n }. So, what remains to be
+stronger MPR strength than {C(1)
+shown is that x2 > x1 with this {C(2)
+n }.
+
+n }. Further construct {C(2)
+
+n } such that limn→∞ C(2)
+
+that are greater than C(1)
+
+Obviously if x1 = 0, which happens when C(1)
+
+n }) = Υ(x,{C(1)
+n }) = C(x,{C(1)
+
+n = 0
+for all n, then we have x2 > x1 already because by our
+construction of {C(2)
+n } we can only have x2 > 0. Thus, we
+need consider only those {C(1)
+n }’s that give x1 ∈ (0,∞).
+n }) and C(x,{C(2)
+n })
+Let us compare the values of Υ(x,{C(2)
+(cid:5)
+when evaluated at x = x1. Let {δn} = {C(2)
+n − C(1)
+n }. Then
+n }) + e−x
+Υ(x,{C(2)
+(cid:5)
+xn
+n∈N δn
+n! and
+1+τ−e−x
+n }) + e−x
+C(x,{C(2)
+xn−1
+n∈N δn
+(n−1)! , where
+in both expressions all the δn terms are greater than zero.
+n }) is attained at x1, from
+Because the supremum of Υ(x,{C(1)
+n }). Observe
+(16) we know that Υ(x1,{C(1)
+that for all x ∈ (0,∞), since xn
+xn−1
+(n−1)! when n > x+1
+and x
+for any τ > 0, it will also be true that
+xn−1
+(n−1)! when n > x + 1 and for any τ > 0.
+1+τ−e−x
+Thus we have,
+
+n }) = C(x1,{C(1)
+n! < x
+
+1+x < 1+τ−e−x
+
+xn
+n! < 1
+
+1+x
+
+1+τ
+
+1+τ
+
+1+τ
+
+1
+
+Υ(x1,{C(1)
+< C(x1,{C(1)
+
+n }) + e−x1
+(cid:5)
+1+τ−e−x1
+n }) + e−x1
+n }) < C(x1,{C(2)
+
+1+τ
+
+(cid:5)
+xn
+n∈N δn
+1
+n!
+xn−1
+(n−1)! ,
+
+1
+
+n∈N δn
+
+i.e., Υ(x1,{C(2)
+and that the supremum of Υ(x,{C(2)
+follows from (17) that we must have x1 < x2.
+
+n }). Finally, given this fact
+n }) is attained at x2, it
+
+The authors would like to thank our reviewers for their
+efforts and valuable suggestions. D. S. Chan also thanks Prof.
+Z. Haas for his insightful comments.
+
+DISCLAIMER
+
+The opinions in this paper represent only the personal views
+
+of the authors, not necessarily those of their employers.
+
+REFERENCES
+
+[1] S. Ghez, S. Verd´u, and S. C. Schwartz, “Stability properties of slotted
+ALOHA with multipacket reception capability,” IEEE Trans. Autom.
+Control, vol. 33, no. 7, pp. 640–649, 1988.
+
+[2] ——, “Optimal decentralized control in the random-access multipacket
+channel,” IEEE Trans. Autom. Control, vol. 34, no. 11, pp. 1153–1163,
+1989.
+
+[3] S. Verd´u, Multiuser Detection. Cambridge University Press, 1998.
+[4] L. Tong, Q. Zhao, and G. Mergen, “Multipacket reception in random
+access wireless networks: from signal processing to optimal medium
+access control,” IEEE Commun. Mag., vol. 39, no. 11, pp. 108–112,
+2001.
+
+[5] L. Kleinrock and F. Tobagi, “Packet switching in radio channels—
+part I: carrier sense multiple-access modes and their throughput-delay
+characteristics,” IEEE Trans. Commun., vol. 23, no. 12, pp. 1400–419,
+1975.
+
+[6] IEEE Standard for Information Technology — Telecommunications and
+information exchange between systems — Local and metropolitan area
+networks — Speciﬁc requirements — Part 11: Wireless LAN Medium
+Access Control (MAC) and Physical Llayer (PHY) Speciﬁcations, IEEE
+Std. 802.11-2012, Mar. 2012.
+
+[7] D. S. Chan, T. Berger, and L. Tong, “On the stability and optimal de-
+centralized throughput of CSMA with multipacket reception capability,”
+in Proc. 2004 Allerton Conf. on Comm., Control, and Computing, pp.
+1526–1535.
+
+[8] D. S. Chan, P. Suksompong, J. Chen, and T. Berger, “Improving IEEE
+802.11 performance with cross-layer design and multipacket reception
+via multiuser iterative decoding,” IEEE 802.11-05/0946r0, Sep. 2005.
+[9] M. de Courville, M. Kamoun, J. Gosteau et al., “Another resource to
+
+exploit: multi-user diversity,” IEEE 802.11-05/2187r0, Jul. 2007.
+
+[10] E. Perahia, “VHT below 6 GHz PAR plus 5C’s,” IEEE 802.11-
+
+08/0807r4, Sep. 2008.
+
+[11] IEEE Draft Standard for Information Technology — Telecommuni-
+cations and information exchange between systems — Local and
+metropolitan area networks — Speciﬁc requirements — Part 11: Wire-
+less LAN Medium Access Control (MAC) and Physical Llayer (PHY)
+Speciﬁcations — Amendment 5: Enhancements for Very High Through-
+put for Operation in Bands Below 6 GHz, IEEE Std. P802.11ac/D0.1,
+Jan. 2011.
+
+[12] Y. J. Zhang, P. X. Zheng, and S. C. Liew, “How does multiple-
+packet reception capability scale the performance of wireless local area
+networks?” IEEE Trans. Mobile Comput., vol. 8, no. 7, pp. 923–935,
+2009.
+
+[13] Y. J. Zhang, private communication, Feb. 23, 2009.
+[14] R.-H. Gau, “Modeling the slotted nonpersistent CSMA protocol for
+wireless access networks with multiple packet reception,” IEEE Com-
+mun. Lett., vol. 13, no. 10, pp. 797–799, 2009.
+
+[15] F. Babich and M. Comisso, “Theoretical analysis of asynchronous multi-
+packet reception in 802.11 networks,” IEEE Trans. Commun., vol. 58,
+no. 6, pp. 1782–1794, 2010.
+
+[16] L. Roberts, “Aloha packet system with and without slots and capture,”
+
+Computer Commun. Review, vol. 5, no. 2, pp. 28–42, 1975.
+
+[17] D. Bertsekas and R. Gallager, Data Networks, 2nd edition. Prentice-Hall,
+
+1987.
+
+[18] F. Cal`ı, M. Conti, and E. Gregori, “Dynamic tuning of the IEEE 802.11
+protocol to achieve a theoretical throughput,” IEEE/ACM Trans. Netw.,
+vol. 8, no. 6, pp. 785–799, 2000.
+
+[19] F. Tobagi and L. Kleinrock, “Packet switching in radio channels—part
+IV: stability considerations and dynamic control in carrier sense multiple
+access,” IEEE Trans. Commun., vol. 25, no. 10, pp. 1103–1119, 1977.
+[20] J. Meditch and C.-T. Lea, “Stability and optimization of the CSMA
+and CSMA/CD channels,” IEEE Trans. Commun., vol. 31, no. 6, pp.
+763–774, 1983.
+
+[21] A. G. Pakes, “Some conditions for ergodicity and recurrence of Markov
+
+chains,” Oper. Res., vol. 17, pp. 1058–1061, 1969.
+
+278
+
+IEEE TRANSACTIONS ON COMMUNICATIONS, VOL. 61, NO. 1, JANUARY 2013
+
+[22] M. Kaplan, “A sufﬁcient condition for nonergodicity of a Markov chain,”
+
+IEEE Trans. Inf. Theory, vol. 25, no. 4, pp. 470–471, 1979.
+
+[23] L. I. Sennott, P. A. Humblet, and R. Tweedie, “Mean drifts and the
+non-ergodicity of Markov chains,” Oper. Res., vol. 31, pp. 783–789,
+1983.
+
+[24] D. S. Chan, “Random multiple access communications on multipacket
+
+channels,” Ph.D. dissertation, Cornell Univ., New York, Jan. 2006.
+
+[25] V. Naware, G. Mergen, and L. Tong, “Stability and delay of ﬁnite user
+slotted ALOHA with multipacket reception,” IEEE Trans. Inf. Theory,
+vol. 51, no. 7, pp. 2636–2656, 2005.
+
+[26] B. S. Tsybakov, V. A. Mikhailov, and N. B. Likhanov, “Bounds for
+packet transmission rate in a random multiple access system,” Problemy
+Peredachi Informatsii, vol. 19, no. 1, pp. 61–81, 1983 (translated from
+Russian).
+
+[27] D. Gesbert, M. Kountouris, R. W. Heath Jr. et al., “Shifting the
+MIMO paradigm: from single-user to multiuser communications,” IEEE
+Wireless Commun. Mag., vol. 24, no. 5, pp. 36–46, 2007.
+
+[28] E. Perahia and R. Stacey, Next Generation Wireless LANs. Cambridge
+
+University Press, 2008.
+
+[29] K. Nishimori, R. Kudo, Y. Takatoti et al., “Performance evaluation of
+8x8 multi-user MIMO-OFDM testbed in an actual indoor environment,”
+in Proc. 2006 IEEE Int. Symp. on Personal, Indoor and Mobile Radio
+Comm.
+
+[30] E. Aryafar, N. Anand, T. Salonidis, and E. W. Knightly, “Design and
+experimental evaluation of multi-user beamforming in wireless LANs,”
+in Proc. 2010 Annu. Int. Conf. Mobile Comput. and Networking, pp.
+197–208.
+
+Douglas S. Chan (S’96–M’98–S’00–M’04–SM’12)
+received his B.A.Sc. degree in electrical engineer-
+ing (EE) from Queens University, Kingston, On-
+tario, Canada. He received from Cornell University,
+Ithaca, NY the M.Eng. degree in EE in May 2001
+and the Ph.D. degree in electrical and computer
+engineering (ECE) with a minor in applied mathe-
+matics in Jan 2006. His research interests have been
+on communications theory and its applications.
+
+From 1998 to 2000, he was with the IBM Toronto
+Lab as Software Engineer and he was involved
+with developing enterprise-scaled applications for database access, distributed
+computing and network management. From Jan to May 2006, he was a
+Visiting Scientist with the School of ECE at Cornell University. In July
+2006, he joined Cisco Systems, Wireless Networking Business Unit, where
+he is currently a Technical Leader and his work includes research and
+development (R&D) of IEEE 802.11-based wireless local area networking
+products and their standardizations. Since 2011, he also became a member
+of the Cisco Advanced Architecture and Research team that investigates on
+currently emerging paradigms like Fog Computing and Internet of Things.
+In addition, he had multiple internships in the wireless industry: Hong
+Kong Telecom CSL, Mobile Networks (Radio Planning); Texas Instruments,
+Communications Systems Lab; and Symbol Technologies, Corporate R&D
+
+Dr. Chan served as the Secretary for the IEEE Signal Processing Soci-
+ety Santa Clara Valley chapter for the 2007–2009 term. He has received
+recognitions from the IEEE Standards Association for his contributions to
+the 802.11n and 802.11y standards. He is a licensed professional engineer of
+Ontario, Canada.
+
+Toby Berger
+(S’60–M’66–SM’74–F’78–LF’06)
+was born in New York, NY on September 4, 1940.
+He received the B.E. degree in electrical engineering
+from Yale University, New Haven, CT in 1962, and
+the M.S. and Ph.D. degrees in applied mathematics
+from Harvard University, Cambridge, MA in 1964
+and 1966.
+
+From 1962 to 1968 he was a Senior Scientist
+at Raytheon Company, Wayland, MA, specializing
+in communication theory, information theory, and
+coherent signal processing. From 1968 through 2005
+he was a faculty member at Cornell University, Ithaca, NY where he held
+the position of Irwin and Joan Jacobs Professor of Engineering. In 2006 he
+became a professor in the ECE Department of the University of Virginia,
+Charlottesville, VA.
+
+Professor Berger’s research interests include information theory, neuroin-
+formation theory, random ﬁelds, communication networks, wireless communi-
+cations, video compression, voice and signature compression and veriﬁcation,
+quantum information theory, and coherent signals processing. He is the author
+of Rate Distortion Theory: A Mathematical Basis for Data Compression and
+a co-author of Digital Compression for Multimedia: Principles and Standards
+and of Information Measures for Discrete Random Fields.
+
+Berger has served as editor-in-chief of the IEEE TRANSACTIONS ON
+INFORMATION THEORY and as president of the IEEE Information Theory
+Group. He has been a Fellow of the Guggenheim Foundation, the Japan
+Society for Promotion of Science, the Ministry of Education of the People’s
+Republic of China and the Fulbright Foundation. He received the 1982 Freder-
+ick E. Terman Award of the American Society for Engineering Education, the
+2002 Shannon Award from the IEEE Information Theory Society, the IEEE
+2006 Leon K. Kirchmayer Graduate Teaching Award, the 2010 Aaron D.
+Wyner Distinguished Service Award of the IEEE Information Theory Society,
+and the 2011 IEEE Richard W. Hamming Medal. Professor Berger is a Life
+Fellow of the IEEE, a life member of Tau Beta Pi, a member of the National
+Academy of Engineering, and an avid amateur blues harmonica player.
+
+Lang Tong (S’87–M’91–SM’01–F’05) is the Irwin
+and Joan Jacobs Professor in Engineering at Cornell
+University, Ithaca, New York. He received the B.E.
+degree from Tsinghua University, Beijing, China,
+in 1985, and M.S. and Ph.D. degrees in electrical
+engineering in 1987 and 1991, respectively, from the
+University of Notre Dame, Notre Dame, Indiana. He
+was a Postdoctoral Research Afﬁliate at the Infor-
+mation Systems Laboratory, Stanford University in
+1991. He was the 2001 Cor Wit Visiting Professor
+at the Delft University of Technology and had held
+
+visiting positions at Stanford University, and U.C. Berkeley.
+
+Lang Tong’s research is in the general area of statistical inference, com-
+munications, and complex networks. His current research focuses on energy
+and power systems. He received the 1993 Outstanding Young Author Award
+from the IEEE Circuits and Systems Society, the 2004 best paper award from
+IEEE Signal Processing Society, and the 2004 Leonard G. Abraham Prize
+Paper Award from the IEEE Communications Society, and is a coauthor of
+seven student paper awards. He received Young Investigator Award from the
+Ofﬁce of Naval Research. He was a Distinguished Lecturer of the IEEE Signal
+Processing Society.
+
+

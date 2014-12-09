@@ -1,0 +1,11 @@
+index of json:
+
+
+author - author
+name - title
+series_t - date
+features - keywords
+genre_s - online library name
+manu - url paper
+id - isbn/issn/random number
+cat - abstract
